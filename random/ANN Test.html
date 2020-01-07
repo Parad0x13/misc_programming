@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<title>EaselJS Demo</title>
+		<script src="https://code.createjs.com/createjs-2015.11.26.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+		<script>
+			var stage;
+			var TAG_NEURON_BODY = "TAG_NEURON_BODY";
+			var TAG_NEURALCONNECTION_BOX = "TAG_NEURALCONNECTION_BOX";
+
+			class NeuralConnection extends createjs.Container {
+				constructor(isInput) {
+					super();
+
+					this.parentNeuron = null;
+					this.isConnecting = false;
+
+					var handleWidth = 15;
+					var handleHeight = 3;
+					var handle = new createjs.Shape();
+					handle.graphics.beginFill("pink").drawRect(0, -handleHeight / 2, handleWidth, handleHeight);
+					this.addChild(handle);
+
+					var boxSize = 10;
+					var box = new createjs.Shape();
+					box.graphics.beginFill("pink").drawRoundRect(handleWidth, -boxSize / 2, boxSize, boxSize, boxSize * 0.25);
+					box.tag = TAG_NEURALCONNECTION_BOX;
+					this.addChild(box);
+
+					this.isInput = isInput;
+					if(this.isInput) {
+						this.rotation = 180;
+					}
+
+					this.on("mousedown", this.onMouseDown);
+					this.on("pressmove", this.onPressMove);
+					this.on("pressup", this.onPressUp);
+				}
+
+				onMouseDown(event) {
+					if(event.target.tag == TAG_NEURALCONNECTION_BOX) {
+						this.isConnecting = true;
+					}
+				}
+
+				onPressMove(event) {
+					if(event.target.tag == TAG_NEURALCONNECTION_BOX) {
+						if(this.isConnecting) {
+							// [TODO] Animate a line between connection and cursor
+						}
+					}
+				}
+
+				onPressUp(event) {
+					this.isConnecting = false;
+
+					var child = stage.getObjectUnderPoint(event.stageX, event.stageY);
+					if(child == null) {
+						return;
+					}
+
+					if(child.tag == TAG_NEURALCONNECTION_BOX) {
+						var a = this;
+						var b = child.parent;
+
+						if(a.parentNeuron == b.parentNeuron) {
+							console.log("Error, cannot connect connections that belong to the same Neuron");
+						}
+						else if(a.isInput == b.isInput) {
+							console.log("Error, cannot connect simmilar neural input/outputs");
+						}
+						else {
+							// [TODO] Find out how to properly align the line to the box
+							// [TODO] Have the line animate as the neuron is moved
+							// [TODO] Don't have the line be created every single time
+							console.log("Connection can be made!");
+
+							var line = new createjs.Shape();
+							stage.addChild(line);
+							line.graphics.setStrokeStyle(1).beginStroke("rgba(0, 0, 0, 1)");
+							line.graphics.moveTo(a.localToGlobal(0, 0).x, a.localToGlobal(0, 0).y);
+							line.graphics.lineTo(b.localToGlobal(0, 0).x, b.localToGlobal(0, 0).y);
+							line.graphics.endStroke();
+						}
+					}
+				}
+			}
+
+			class Neuron extends createjs.Container {
+				constructor(x, y) {
+					super();
+
+					this.x = x;
+					this.y = y;
+					this.width = 100;
+					this.height = 100;
+
+					var body = new createjs.Shape();
+					body.graphics.beginFill("DeepSkyBlue").drawRoundRect(0, 0, this.width, this.height, this.width * 0.1);
+					body.tag = TAG_NEURON_BODY;
+					this.addChild(body);
+
+					this.inputs = [];
+					this.outputs = [];
+					this.addConnection(true);
+					this.addConnection(true);
+					this.addConnection(false);
+
+					this.on("click", this.onClick);
+					this.on("pressmove", this.onPressMove);
+				}
+
+				addConnection(isInput) {
+					var connection = new NeuralConnection(isInput);
+					connection.parentNeuron = this;
+					this.addChild(connection);
+
+					var array = this.inputs;
+					if(!isInput) {
+						connection.x = this.width;
+						array = this.outputs;
+					}
+
+					array.push(connection);
+
+					this.sortConnections(array);
+				}
+
+				// [WARNING] Untested
+				removeConnection(connection) {
+					connection.parent.removeChild(connection);
+
+					_.reject(this.inputs, connection);
+					_.reject(this.outputs, connection);
+
+					this.sortConnections(this.inputs);
+					this.sortConnections(this.outputs);
+				}
+
+				sortConnections(array) {
+					var hDelta = this.height / (1 + array.length);
+					for(var i = 0;i < array.length;i++) {
+						var h = hDelta * i + hDelta;
+						array[i].y = h;
+					}
+				}
+
+				onClick(event) {
+					if(event.target.tag == TAG_NEURON_BODY) {
+						//
+					}
+				}
+
+				onPressMove(event) {
+					if(event.target.tag == TAG_NEURON_BODY) {
+						event.currentTarget.x = event.stageX - event.currentTarget.width / 2;
+						event.currentTarget.y = event.stageY - event.currentTarget.height / 2;
+					}
+				}
+			}
+
+			function init() {
+				stage = new createjs.Stage("demoCanvas");
+				createjs.Ticker.addEventListener("tick", tick);
+				createjs.Ticker.setFPS(60);
+
+				var neuron = new Neuron(50, 50);
+				stage.addChild(neuron);
+				var neuron = new Neuron(250, 50);
+				stage.addChild(neuron);
+			}
+
+			function tick(event) {
+				stage.update();
+			}
+		</script>
+		<style></style>
+	</head>
+	<body onload="init();">
+		<canvas id="demoCanvas" width="1000" height="1000">
+			Canvas is not supported in this browser... get Chrome fool.
+		</canvas>
+	</body>
+</html>

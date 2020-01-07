@@ -1,0 +1,19 @@
+The intent of this is to reverse engineer the save file used in bloodrizer.ru/games/kittens just to see if I can
+
+And it turns out I can! I was able to crack it in 1hr 50mins
+
+I was able to find game.js non obfuscated directly on their site, how kind of them
+
+I then found the encrypt/decrypt functions that referenced base64 encoded LZStrings
+
+This turned out to be fortunate because LZStrings is opensourced here https://github.com/pieroxy/lz-string
+
+I then used the guide here http://pieroxy.net/blog/pages/lz-string/guide.html to create a hack
+
+I took a brand new game's savefile and ran it through LZString.decompressFromBase64() to see the underlying JSON structure
+
+Quite nice of the devs to leave this non-obfuscated too huh?!
+
+I was then able to make any changes to that string as I wanted and run it through LZString.compressToBase64() to create a valid savefile
+
+I now pwn Kittens Game! This is a great example of how NOT to design a gamesave. All in all I'd consider this a very easy experiement

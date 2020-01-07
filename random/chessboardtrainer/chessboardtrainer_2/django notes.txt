@@ -1,0 +1,78 @@
+--== Management ==--
+python manage.py runserver
+
+--== Adding App ==--
+python manage.py startapp appNameHere
+Add newApp to settings.py under INSTALLED_APPS
+Add newApp to urls.py under urlpatterns
+	# Might need to add this since we are using import
+	from django.urls import include
+	url(r'newApp/', include('newApp.urls'))
+Add view stuff to newApp's views.py
+	More information required to do this using render, but here's a simple example
+	from django.shortcuts import render
+	from django.http import HttpResponse
+
+	def index(request):
+		return HttpResponse("<h2>HEY!</h2>")
+Create urls.py in newApp
+	from django.conf.urls import url
+	from . import views
+
+	urlpatterns = [
+		url(r'^$', views.index, name = 'index')
+	]
+Can now navigate to 127.0.0.1:8000/newApp
+
+--== Using Jinja ==--
+In views.py for newApp
+	from django.shortcuts import render
+
+	def index(request):
+		return render(request, 'newApp/home.html')
+In newApp create templates folder
+	[NOTE] This folder is global to all django apps, so consider naming conventions
+For name collision prevention create another folder within templates called myApp
+Create your html file, here we will be creating header.html which will be global across the site
+	<!DOCTYPE html>
+	<html lang="en">
+
+	<head>
+		<title>My Website</title>
+		<meta charset="utf-8" />
+	</head>
+
+	<body class="body" style="background-color:#f6f6f6">
+		<div>
+			{% block content %}
+			{% endblock %}
+		</div>
+	</body>
+
+	</html>
+Create newApp/templates/newApp/include/ folder to keep code snippets in
+Create your main page code now. Outlined here is home.html
+	{% extends "newApp/header.html" %}
+
+	{% block content %}
+	{% include "newApp/includes/htmlsnippet.html" %}
+	{% endblock %}
+Create newApp/templates/newApp/include/htmlsnippet.html
+	{% block content %}
+	<p>Welcome to my website!</p>
+	{% endblock %}
+
+--== Bootstrap ==-
+Download https://github.com/twbs/bootstrap/releases/download/v4.0.0-beta.2/bootstrap-4.0.0-beta.2-dist.zip
+Create myApp/static/ folder
+Paste the folders from within that zip file there
+	js/
+	css/
+You can verify that /static/ is being used from within website/settings.py
+	STATIC_URL = '/static/'
+	[NOTE] Keep in mind just like /templates/ this is global to all apps
+	[NOTE] Keep in mind /static/ is made available to end user, monitor what you place in here
+Edit newApp/templates/newApp/header.html to load bootstrap
+	<meta charset="utf-8" />
+	{% load staticfiles %}
+	<link rel='stylesheet' href="{% static 'css/bootstrap.min.css' %}" type='text/css' />

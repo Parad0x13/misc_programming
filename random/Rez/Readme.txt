@@ -1,0 +1,1 @@
+This was supposed to be a project that I did with Jesse that utilized Deep Neural Networks. Haven't quite finished it yet

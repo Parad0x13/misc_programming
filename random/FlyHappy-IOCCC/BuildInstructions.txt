@@ -1,0 +1,7 @@
+Nothing too complicated:
+
+${CC} prog.c
+should work just fine
+
+Unless it doesn't work
+Then it's not fine

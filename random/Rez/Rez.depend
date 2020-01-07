@@ -1,0 +1,45 @@
+# depslib dependency file v1.0
+1457930763 source:c:\users\bryan\desktop\rez\main.cpp
+	<iostream>
+	<vector>
+	"PTron.h"
+	"PTron_Examples.h"
+
+1457820107 c:\users\bryan\desktop\rez\cell.h
+	<vector>
+	<map>
+
+1457820334 source:c:\users\bryan\desktop\rez\cell.cpp
+	<iostream>
+	<vector>
+	<string>
+	<stdlib.h>
+	"Cell.h"
+	"common.h"
+
+1457825287 source:c:\users\bryan\desktop\rez\common.cpp
+	"common.h"
+	<ctime>
+	<cstdlib>
+
+1457814669 c:\users\bryan\desktop\rez\common.h
+
+1457839066 c:\users\bryan\desktop\rez\ptron.h
+	<vector>
+	<map>
+	<string>
+
+1457838997 source:c:\users\bryan\desktop\rez\ptron.cpp
+	<iostream>
+	<vector>
+	<string>
+	<stdlib.h>
+	"PTron.h"
+	"common.h"
+
+1457835631 source:c:\users\bryan\desktop\rez\ptron_examples.cpp
+	<iostream>
+	"PTron.h"
+
+1457930758 c:\users\bryan\desktop\rez\ptron_examples.h
+

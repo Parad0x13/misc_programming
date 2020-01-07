@@ -1,0 +1,34 @@
+Critters are 1 pixel in size
+Can eat food they come across to extend life or produce more babies
+Motor functions are movement in cardinal directions
+Actions are determined by genes
+Genes represented by 4 letters (A, T, C, G)
+Genes are seperated by sequence identifiers:
+	Start:	ATCG
+	Stop:	GCTA
+
+After start identifier the sequence determines the structure of a gene
+For instance in the sequence: ATCG AAGCTTA GCTA the important part is AAGCTTA
+Protiens are produced chemically from instructions in these genes:
+	A: Move Up
+	T: Move Down
+	C: Move Left
+	G: Move Right
+So the protine produced by the gene (AAGCTTA) looks like:
+XX
+X
+S
+Where S is part of the gene and is the starting position
+
+Attributes of the protine are:
+	Height: 3
+	Width: 2
+	How many are filled in square: AAGCTTA = 4/6
+
+Motor function can be initiated by certain protein shapes
+
+Gene 0: Eating
+Gene 1: Up Movement
+Gene 2: Down Movement
+Gene 3: Left Movement
+Gene 4: Right Movement

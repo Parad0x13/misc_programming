@@ -1,0 +1,45 @@
+Compleated 29Aug13
+My second attempt at Obfuscated C
+To be submitted to 22nd IOCCC Competition (01Aug13-03Oct13)
+www.ioccc.org
+
+-== Personal Remarks ==-
+When I win I would like my source and binary renamed to Parad0x13
+That's a zero... it's very important... 0x13 is one of my favorite DOS video modes
+
+-== Levels of Obfuscation ==-
+
+- Simple -
+
+name[index] --> index[name]
+Obfuscated variable/struct names
+
+Global variables accessed through global array.
+E.G. all global variables concatenated into: int globals[8];
+
+Dramatic abuse of global variables for different purposes
+
+- Not as simple -
+
+Reuse of the same struct type for different types of uses.
+For instance the 'walls' and the 'entities' use the same struct
+
+Use of semi-magic numbers (not really magical so kinda magical)
+
+Misleading use of '<' in the source
+
+Intense abuse of ()?():()
+
+Concatenated multiple array run-throughs of unrelated processes in a single loop
+E.G.
+[Source]
+for(int d=0;d<10;d++)renderWall(walls[d]);
+for(int d=0;d<20;d++)renderEntities(entities[d]);
+[/Source]
+Turns into:
+[Source]
+for(int d=0;d<20;d++) {
+	renderEntities(entities[d]);
+	if(d<10)renderWalls(walls[d]);
+}
+[/Source]

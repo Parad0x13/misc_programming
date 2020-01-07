@@ -1,0 +1,12 @@
+When render screen is up, made controls frame forced to be up too
+OR! Put the render frame INSIDE of the controls frame, and allow it to be scaled withing the controls frame
+Add frame splitters to controls frame and button options for all available fractals
+Add duffing, pickover, and ikeda strangeattractors
+Complex fractal optimizers
+Add a "Generating Please Wait..." to controls frame when generating
+Add right click menu function to render screen
+Add auto rotate with button presses of 'x', 'y', or 'z' timed with the clock
+Add optional function to make vertexs in the distance duller than the ones up front, make them fade out
+Fix the clipping planes to be more reasonable
+Create the functions that allow one to switch between different modes of opengl optimization, 3D, 2D etc...
+Add orbits window option, like in fractint

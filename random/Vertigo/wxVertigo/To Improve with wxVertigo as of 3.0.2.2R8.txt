@@ -1,0 +1,34 @@
+Need to fix zooming functions for 2D Strange Attractors, make it minx maxx miny maxy mapped
+
+Have a view box for the min max (x, y) for fractals, and allow them to be editable
+
+Iterate ONLY zoomed area in strange attractors
+
+On low iterations for Henon fractal, white dot appears at (0, 0) Fix this (Looks like the same for Tinkerbell)
+
+It appears on all 2d strange attractors white dot is drawn first before other dots
+
+Add timing functions for Cellular Automata
+
+When you are at low iterations for 2d SA and have it rotated through a 3d SA it draws weird random points!
+
+To speed up automata, buffer many lives in advanced and then just print them
+^- refer to automata optimization text
+Find out whats needed to add zooming box to 2d SA too
+
+For Mandelbrot fractal benchmark, calculate fractal redraws without rendering, and find time after that, with "Calculating Please Wait..."
+
+Create a InitOpenGL for each type of graph, e.g. bifurcation, complex, cardison, cobweb etc...
+
+Have axis button restricted to only 3d fractals, disabled for anything else
+
+Create 2d fractal small axis lines, e.g. small grey lines
+
+Create "Areas of Interest" options to select from from different fractals, probably in scroll down box
+
+Add sliders to change SA values (possibly creating a bifurcation map)
+
+Add julia viewer for mandelbrot fractal
+able to save image on screen
+
+Create a "frame" for controls for specific fractals. These forms can be appended to individual frames

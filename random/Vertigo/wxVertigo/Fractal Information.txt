@@ -1,0 +1,9 @@
+
+
+Lorenz <- Edward N. Lorenz
+
+Sigma - The ratio of viscosity to thermal conductivity
+
+rho - the temperature difference between the top and bottom of the slice
+
+beta - the width to height ratio of the slice
