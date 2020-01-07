@@ -1,0 +1,133 @@
+For bitmaps with resolution of either 1, 4, or 8. Not nessisary for 24 bit
+BITMAPFILEHEADER	bmfh
+BITMAPINFOHEADER	bmih
+RGBQUAD			aColors[]
+BYTE			aBitmapBits[]
+
+
+typedef struct tagBITMAPFILEHEADER {    /* bmfh */
+    UINT    bfType;
+    DWORD   bfSize;
+    UINT    bfReserved1;
+    UINT    bfReserved2;
+    DWORD   bfOffBits;
+} BITMAPFILEHEADER;
+
+bfType=BM
+bfSize=total filesize, 4bytes long. Reads from least to greatest value
+bfReserved1=00
+bfReserved2=00
+bfOffBits=Offset from header to actual bitmap data
+
+
+typedef struct tagBITMAPINFO {  /* bmi */
+    BITMAPINFOHEADER    bmiHeader;
+    RGBQUAD             bmiColors[1];
+} BITMAPINFO;
+
+bmiHeader=A BITMAPINFOHEADER structure, all the size and stuff data
+bmiColors=array of RGBQUAD structures that have the DIB colors
+
+
+typedef struct tagBITMAPINFOHEADER {    /* bmih */
+    DWORD   biSize;
+    LONG    biWidth;
+    LONG    biHeight;
+    WORD    biPlanes;
+    WORD    biBitCount;
+    DWORD   biCompression;
+    DWORD   biSizeImage;
+    LONG    biXPelsPerMeter;
+    LONG    biYPelsPerMeter;
+    DWORD   biClrUsed;
+    DWORD   biClrImportant;
+} BITMAPINFOHEADER;
+
+biSize=bytes the BITMAPINFOHEADER requires, should be like 28hex/40dec
+biWidth=Xdimention of image, least to greatest byte config
+biHeight=Ydimention of image, least to greatest byte config
+biPlanes=# of planes, must be 1
+biBitCount=bits per pixel, resolution. Either 1, 4, 8, or 24. Not nessisarially 24
+biCompression=Compression of file, refer to compression at end
+biSizeImage=Size of image, valid to set to 0 if no compression
+biXPelsPerMeter=XResolution in pixels per meter. Set to 0 if you want
+biYPelsPerMeter=YResolution in pixels per meter. Set to 0 if you want
+BiClrUsed=Number of colors in the index that are used. If 0 then all are used
+biClrImportant=# of colors in the index that are important. If = 0 then all are important
+
+
+typedef struct tagRGBQUAD {     /* rgbq */
+    BYTE    rgbBlue;
+    BYTE    rgbGreen;
+    BYTE    rgbRed;
+    BYTE    rgbReserved;
+} RGBQUAD;
+
+This is pretty self-explainatory. For 24bit images I guess... Not needed in <24bit.
+
+
+typedef struct tagBITMAPCOREINFO {  /* bmci */
+    BITMAPCOREHEADER bmciHeader;
+    RGBTRIPLE        bmciColors[1];
+} BITMAPCOREINFO;
+
+bmciHeader=A BITMAPCOREHEADER structure, all the size and stuff data
+bmciColors=Arrays of RGBTRIPLE structures that define the colors in the bitmap
+
+
+typedef struct tagBITMAPCOREHEADER {    /* bmch */
+    DWORD   bcSize;
+    short   bcWidth;
+    short   bcHeight;
+    WORD    bcPlanes;
+    WORD    bcBitCount;
+} BITMAPCOREHEADER;
+
+bcSize=# of bytes in the BITMAPCOREHEADER structure
+bcWidth=Xdimention of the image
+bcHeight=Ydimention of the image
+bcPlanes=Planes in the image, must be set to 1
+bcBitCount=Bits per color, resolution. Either 1, 4, 8, 24. For this header, res. is 24
+
+
+typedef struct tagRGBTRIPLE {   /* rgbt */
+    BYTE    rgbtBlue;
+    BYTE    rgbtGreen;
+    BYTE    rgbtRed;
+} RGBTRIPLE;
+
+This is only for 24bit images. Comes after the BITMAPCOREHEADER.
+
+
+INFO ON COLORARRAYTABLE, COLORDATA, AND COMPRESSION
+===================================================
+
+ColorArrayTable is the RGB values of howevermany colors are in the specific resolution of the DIB image.
+
+1bit: only two colors
+
+4bit: 16 colors
+
+8bit: 256 colors
+
+24bit: there is no ColorArrayTable for 24bit images.
+
+The array for this is RGBQUAD. So follow the RGBQUAD requirements here.
+
+
+ColorData is how the actual data that refers to the ColorArrays and what color to use. These are different for each bit resolution image type.
+
+1bit: each bit reffers to either the first or second color in the ColorArray table. If it is 0, then use the first and 1 for the second.
+
+4bit: 4bits for ColorArrayTable refferance.
+
+8bit: 1byte for ColorArrayTable refferance.
+
+24bit: 3bytes for BGR values.
+
+Remember that each scanline must end on a LONG/32bits boundary.
+
+
+Compression is helpful in a bitmap since because redundancy often happens with ColorArrayTable referances, minimizing redundancy can drastically reduce filesize.
+
+I will complete this part of the tutorial later...

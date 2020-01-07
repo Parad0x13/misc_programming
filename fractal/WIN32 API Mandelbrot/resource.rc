@@ -1,0 +1,93 @@
+#include "resource.h"
+
+IDI_MYICON ICON DISCARDABLE "WIN32API Mandelbrot.ico"
+
+IDR_MYMENU MENU
+BEGIN
+  POPUP "&File"
+  BEGIN
+    MENUITEM "E&xit",ID_FILE_EXIT
+  END
+  POPUP "&Fractals"
+  BEGIN
+    POPUP "Complex"
+    BEGIN
+      MENUITEM "Mandelbrot",ID_MANDELBROT
+      MENUITEM "Mandelbar",ID_MANDELBAR
+      MENUITEM "Julia",ID_JULIA
+      MENUITEM "Buddahbrot",0,GRAYED
+      MENUITEM "Burning Ship",0,GRAYED
+    END
+    POPUP "Strange Attractors"
+    BEGIN
+      POPUP "2D"
+      BEGIN
+        MENUITEM "Henon",ID_HENON
+        MENUITEM "Tinkerbell",ID_TINKERBELL
+      END
+      POPUP "3D"
+      BEGIN
+        MENUITEM "Lorenz",ID_LORENZ
+        MENUITEM "Rabinovich Fabrikant",ID_RABINOVICHFABRIKANT
+        MENUITEM "Hadley Circulation",ID_HADLEY
+        MENUITEM "Rossler Attractor",ID_ROSSLER
+        MENUITEM "ACT Attractor",ID_ACT
+        MENUITEM "Duffing",0,GRAYED
+        MENUITEM "Pickover",0,GRAYED
+        MENUITEM "Ikeda",0,GRAYED
+        MENUITEM "Rucklidge",ID_RUCKLIDGE
+      END
+    END
+    POPUP "&IFS"
+    BEGIN
+      MENUITEM "Sierpinski",ID_IFS_SIERPINSKI
+      MENUITEM "TriANGLES",ID_IFS_TRIANGLES
+      MENUITEM "Pentagon",ID_IFS_PENTAGON
+    END
+  END
+  POPUP "Shader"
+  BEGIN
+    MENUITEM "Escapetime",ID_ESCAPETIME
+    MENUITEM "Escape+1-log(log(dist))/log(2)",ID_NORMALIZE_1
+    MENUITEM "Escape+1-log(log(dist))/log(2)+z.real",ID_NORMALIZE_1_V1
+    MENUITEM "Escape+1-log(log(dist))/log(2)+z.immaginary",ID_NORMALIZE_1_V2
+    MENUITEM "Escape+1-log(log(dist))/log(2)+(z.real/z.immaginary)",ID_NORMALIZE_1_V3
+    MENUITEM "Escape+1-log(log(dist))/log(2)+z.real+z.immaginary+(z.real/z.immaginary)",ID_NORMALIZE_1_V4
+    MENUITEM "Escape+log(2*log(bailout))-log(log(dist)))/log(2)",ID_NORMALIZE_2
+  END
+  POPUP "&Toolbar"
+  BEGIN
+    MENUITEM "Show Toolbar",ID_TOOLBAR_SHOW
+    MENUITEM "Hide Toolbar",ID_TOOLBAR_HIDE
+  END
+  POPUP "&Help"
+  BEGIN
+    MENUITEM "About",ID_HELP_ABOUT
+  END
+END
+
+IDD_ABOUT DIALOGEX 0,0,239,76
+CAPTION "About"
+FONT 8,"MS Sans Serif",0,0,0
+STYLE WS_POPUP|WS_VISIBLE|WS_CAPTION|WS_SYSMENU|DS_MODALFRAME
+BEGIN
+  CONTROL "&OK",IDOK,"Button",WS_CHILD|WS_VISIBLE|WS_TABSTOP|BS_DEFPUSHBUTTON,174,18,50,14
+  CONTROL "&Cancel",IDCANCEL,"Button",WS_CHILD|WS_VISIBLE|WS_TABSTOP,174,35,50,14
+  CONTROL "About WIN32API Mandelbrot",IDC_STATIC,"Button",WS_CHILD|WS_VISIBLE|BS_GROUPBOX,8,7,226,61
+  CONTROL "Even though the Mandelbrot fractal is NOT the only in the program, its currently ritual\n\nProgrammed by:\nBryan Tremblay of Keikaku Studios",IDC_STATIC,"Static",WS_CHILD|WS_VISIBLE|WS_GROUP|SS_CENTER,16,18,144,40
+END
+
+IDD_TOOLBAR DIALOGEX 300,-29,236,187
+CAPTION "Toolbar"
+FONT 8,"MS Sans Serif",0,0,0
+STYLE WS_POPUP|WS_VISIBLE|WS_CAPTION|DS_MODALFRAME
+EXSTYLE WS_EX_TOOLWINDOW
+BEGIN
+  CONTROL "Close Program",IDC_EXIT,"Button",WS_CHILD|WS_VISIBLE|WS_TABSTOP,142,9,84,15
+  CONTROL "",IDC_TRB1,"msctls_trackbar32",WS_CHILD|WS_VISIBLE,82,60,148,20
+  CONTROL "Iterations for strange attractor and IFS fractals",IDC_STC1,"Static",WS_CHILD|WS_VISIBLE,84,46,146,9
+  CONTROL "Hide Toolbar",ID_TOOLBAR_HIDE,"Button",WS_CHILD|WS_VISIBLE|WS_TABSTOP,8,112,217,68
+  CONTROL "Fullscreen: F1",IDC_STC2,"Static",WS_CHILD|WS_VISIBLE,8,16,48,11
+  CONTROL "Reset",IDC_BTN2,"Button",WS_CHILD|WS_VISIBLE|WS_TABSTOP,6,46,56,43,WS_EX_DLGMODALFRAME
+END
+

@@ -1,0 +1,33 @@
+# Project: Win21 API Mandelbrot
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = Project1_private.res
+OBJ  = main.o $(RES)
+LINKOBJ  = main.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib" -lopengl32 -lgdi32 -lglu32 -s ../../../../Dev-Cpp/lib/libjpeg.a  
+INCS =  -I"C:/Dev-Cpp/include" 
+CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include" 
+BIN  = "WIN32API Mandelbrot.exe"
+CXXFLAGS = $(CXXINCS)  
+CFLAGS = $(INCS)  
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before "WIN32API Mandelbrot.exe" all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "WIN32API Mandelbrot.exe" $(LIBS)
+
+main.o: main.cpp resource.h main.h C:/Dev-Cpp/include/windows.h   C:/Dev-Cpp/include/stdio.h C:/Dev-Cpp/include/sys/types.h   C:/Dev-Cpp/include/math.h C:/Dev-Cpp/include/time.h   C:/Dev-Cpp/include/gl/gl.h C:/Dev-Cpp/include/gl/glu.h fractref.h   InitOGL.h InitWIN32.h ComplexMath.h fractals.h jpeg.h   C:/Dev-Cpp/include/jpeglib.h C:/Dev-Cpp/include/jconfig.h   C:/Dev-Cpp/include/jmorecfg.h coloring.h
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+Project1_private.res: Project1_private.rc resource.rc 
+	$(WINDRES) -i Project1_private.rc --input-format=rc -o Project1_private.res -O coff 

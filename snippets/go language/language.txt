@@ -1,0 +1,12 @@
+khmer
+spanish
+korean
+french
+japanese
+russian
+german
+portuguese
+chinese
+arabic
+dutch
+polish

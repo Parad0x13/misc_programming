@@ -1,0 +1,180 @@
+; DCPU-16 Specifications: http://pastebin.com/raw.php?i=Q4JvQvnM
+; Follows some 0x10c Standards: https://github.com/0x10cStandardsCommittee/0x10c-Standards/blob/master/ABI/Draft_ABI_1.txt
+; v1.0
+
+; [Application Logic Flow]
+JSR init_devices
+JSR initGame
+JSR GameLoop
+JSR GameEnd
+; [/Application Logic Flow]
+
+; Application variables
+:dev_clock DAT 0
+:dev_keyboard DAT 0
+:dev_display DAT 0
+:screenWidth DAT 32
+:screenHeight DAT 12
+:screenOne DAT 0x8000
+:screenTwo DAT 0x8000+(32*12)
+:currentScreen DAT 0
+:offScreen DAT 0
+:gameActive DAT 0
+:font DAT 0xF000
+:goodbyeMessage DAT "Thanks For Playing!", 0x0000
+:deviceCount DAT 0
+:playerX DAT 10
+:playerY DAT 5
+:playerIcon DAT 0xDF21
+
+:find_devices
+	HWN [deviceCount]
+	SET I, 0
+:find_devices_loop
+	HWQ I
+	IFE A, 0xb402 ;		Clock
+		SET [dev_clock], I
+	IFE A, 0x7406 ;		Keyboard
+		SET [dev_keyboard], I
+	IFE A, 0xf615 ;		Display
+		SET [dev_display], I
+	ADD I, 1
+	IFN I, [deviceCount]
+		SET PC, find_devices_loop
+SET PC, POP
+
+:init_devices
+	JSR find_devices
+	; Setup Display
+	SET [currentScreen], [screenOne]
+	SET [offScreen], [screenTwo]
+	SET A, 0
+	SET B, [currentScreen]
+	HWI [dev_display]
+	; Setup Keyboard
+	SET A, 0
+	HWI [dev_keyboard]
+	; Setup Clock
+	SET A, 0
+	SET B, 0
+	HWI [dev_clock]
+SET PC, POP
+
+:setToCurrentScreen
+	SET A, 0
+	SET B, [currentScreen]
+	HWI [dev_display]
+SET PC, POP
+
+:swapScreens
+	IFE [currentScreen], [screenOne]
+		SET PC, ScreenOneSet
+	SET PC, ScreenTwoSet
+	:ScreenOneSet
+		SET [currentScreen], [screenTwo]
+		SET [offScreen], [screenOne]
+		SET PC, swapScreensEnd
+	:ScreenTwoSet
+		SET [currentScreen], [screenOne]
+		SET [offScreen], [screenTwo]
+		SET PC, swapScreensEnd
+	:swapScreensEnd
+	JSR setToCurrentScreen
+SET PC, POP
+
+:initGame
+	SET A, 3
+	SET B, 0xC
+	HWI [dev_display]
+	SET [gameActive], 1
+SET PC, POP
+
+:GameLoop
+	JSR Render
+	JSR HandleInput
+    IFE [gameActive], 1
+    	SET PC, GameLoop
+SET PC, POP
+
+:GameEnd
+	SET I, goodbyeMessage
+	JSR RenderString
+	SET PC, END
+SET PC, POP
+
+:Render
+	JSR ClearScreen
+	JSR RenderPlayer
+	JSR swapScreens
+SET PC, POP
+
+:ClearScreen
+	SET J, 0
+	SET I, [screenWidth]
+	MUL I, [screenHeight]
+:ClearScreenLoop
+	IFE J, I
+		SET PC, ClearScreenEnd
+	SET PUSH, A
+		SET A, J
+		ADD A, [offScreen]
+		SET [A], 0
+	SET A, POP
+	ADD J, 1
+	SET PC, ClearScreenLoop
+:ClearScreenEnd
+SET PC, POP
+
+:RenderPlayer
+	SET I, [playerY]
+	MUL I, [screenWidth]
+	ADD I, [playerX]
+	ADD I, [offScreen]
+	SET [I], [playerIcon]
+SET PC, POP
+
+; Renders a string pointed to by the I register, until NULL(0x0000) is reached
+:RenderString
+	SET J, [currentScreen]
+:RenderStringLoop
+	SET A, [I]
+	IFE A, 0x0000
+		SET PC, RenderStringFinished
+	BOR A, [font]
+	SET [J], A
+	ADD I, 1
+	ADD J, 1
+	SET PC, RenderStringLoop
+:RenderStringFinished
+SET PC, POP
+
+; Returns next keypress in C register
+:ReadFromKeyboardBuffer
+	SET A, 1
+	HWI [dev_keyboard]
+SET PC, POP
+
+:HandleInput
+	JSR ReadFromKeyboardBuffer
+	IFE C, 0
+		SET PC, HandleInputFinished
+	JSR ProcessInput
+	SET PC, HandleInput
+:HandleInputFinished
+SET PC, POP
+
+; Input stored in C register
+:ProcessInput
+	IFE C, 0x11		; Enter
+		SET [gameActive], 0
+	IFE C, 0x77		; UP	(W)
+		SUB [playerY], 1
+	IFE C, 0x73		; DOWN	(S)
+		ADD [playerY], 1
+	IFE C, 0x61		; LEFT	(A)
+		SUB [playerX], 1
+	IFE C, 0x64		; RIGHT	(D)
+		ADD [playerX], 1
+SET PC, POP
+
+:END
